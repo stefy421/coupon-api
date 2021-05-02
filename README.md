@@ -31,8 +31,10 @@ The project includes:
 - Swagger documentation `http://localhost:8080/swagger-ui/`
 - Actuator for checking health of application `http://localhost:8080/actuator/health`
 
+
 ### API Request
-##### Endpoint `http://localhost:8080/coupon/`
+##### local: `http://localhost:8080/coupon/`
+#### AWS: `http://ec2-18-212-190-42.compute-1.amazonaws.com:8888/coupon/`
 Body `application/json`
 ```
 {
