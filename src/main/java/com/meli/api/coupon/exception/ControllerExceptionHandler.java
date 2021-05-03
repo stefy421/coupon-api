@@ -49,7 +49,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler({HttpClientErrorException.class, HttpServerErrorException.class, ResourceAccessException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage ExternalApiCallsExceptionHandler(Exception ex, WebRequest request) {
+    public ErrorMessage externalApiCallsExceptionHandler(Exception ex, WebRequest request) {
         LOG.error("Error calling MercadoLibre API", ex);
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),

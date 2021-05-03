@@ -4,8 +4,9 @@ import com.meli.api.coupon.dto.ItemDTO;
 import com.meli.api.coupon.dto.RequestDTO;
 import com.meli.api.coupon.dto.ResponseDTO;
 import com.meli.api.coupon.exception.APIServiceException;
-import com.meli.api.coupon.service.CouponService;
-import com.meli.api.coupon.service.ItemService;
+import com.meli.api.coupon.service.CouponServiceImpl;
+import com.meli.api.coupon.service.ICouponService;
+import com.meli.api.coupon.service.IItemService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,14 +27,14 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CouponControllerTest {
+class CouponControllerTest {
 
     @Autowired
     private CouponController couponController;
     @Autowired
-    CouponService couponService;
+    ICouponService couponService;
     @MockBean
-    private ItemService itemService;
+    private IItemService itemService;
     private final List<ItemDTO> itemList = new ArrayList<>();
     private final List<String> favoriteItems = new ArrayList<>();
 
@@ -52,11 +53,11 @@ public class CouponControllerTest {
         favoriteItems.add("MLA4");
         favoriteItems.add("MLA5");
 
-        couponService = new CouponService(itemService);
+        couponService = new CouponServiceImpl(itemService);
     }
 
     @Test
-    public void returnSuggestedItems(){
+    void returnSuggestedItems(){
         Float amount = 500f;
         RequestDTO requestDTO = new RequestDTO(favoriteItems, amount);
         when(itemService.findItemsById(favoriteItems)).thenReturn(itemList);
@@ -70,7 +71,7 @@ public class CouponControllerTest {
     }
 
     @Test
-    public void insufficientCouponAmount(){
+    void insufficientCouponAmount(){
         Float amount = 50f;
         RequestDTO requestDTO = new RequestDTO(favoriteItems, amount);
         when(itemService.findItemsById(favoriteItems)).thenReturn(itemList);

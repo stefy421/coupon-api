@@ -1,7 +1,7 @@
 package com.meli.api.coupon.service;
 
 import com.meli.api.coupon.dto.ItemDTO;
-import com.meli.api.coupon.repository.ItemRepository;
+import com.meli.api.coupon.repository.IItemRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -14,19 +14,15 @@ import java.util.List;
  *
  */
 @Service
-public class ItemService {
+public class ItemServiceImpl implements IItemService {
 
-    private final ItemRepository itemRepository;
+    private final IItemRepository itemRepository;
 
-    public ItemService(ItemRepository itemRepository) {
+    public ItemServiceImpl(IItemRepository itemRepository) {
         this.itemRepository = itemRepository;
     }
 
-    /**
-     * Method to find the items by id
-     * @param items The set of the user's favorite item ids.
-     * @return {@link ItemDTO} Item list, which is composed of the item id and its price.
-     */
+    @Override
     public List<ItemDTO> findItemsById(List<String> items){
         return itemRepository.findItemsByIds(new HashSet<>(items));
     }

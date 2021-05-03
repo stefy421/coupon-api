@@ -11,12 +11,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class ItemServiceTest {
+class ItemServiceTest {
     @Autowired
-    private ItemService itemService;
+    private IItemService itemService;
 
     @Test
-    public void mercadoLibreAPIConnection() {
+    void mercadoLibreAPIConnection() {
         String[] items = {"MCO453857398"};
         List<ItemDTO> itemDTOList = itemService.findItemsById(Arrays.asList(items));
         ItemDTO expectedItem = new ItemDTO("MCO453857398",79900f);
@@ -25,7 +25,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void DuplicateItemsReturnsJustOne(){
+    void DuplicateItemsReturnsJustOne(){
         String[] items = {"MCO453857398","MCO453857398"};
         List<ItemDTO> itemDTOList = itemService.findItemsById(Arrays.asList(items));
         assertEquals(1, itemDTOList.size());

@@ -3,14 +3,10 @@ package com.meli.api.coupon.controller;
 import com.meli.api.coupon.dto.RequestDTO;
 import com.meli.api.coupon.dto.ResponseDTO;
 import com.meli.api.coupon.exception.APIServiceException;
-import com.meli.api.coupon.service.CouponService;
+import com.meli.api.coupon.service.ICouponService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -21,9 +17,9 @@ import javax.validation.Valid;
 @CrossOrigin
 @RequestMapping("/coupon/")
 public class CouponController {
-    private final CouponService couponService;
+    private final ICouponService couponService;
 
-    public CouponController(CouponService couponService){
+    public CouponController(ICouponService couponService){
         this.couponService = couponService;
     }
 

@@ -20,25 +20,19 @@ import java.util.stream.Collectors;
  *
  */
 @Repository
-public class ItemRepository {
+public class ItemRepositoryImpl implements IItemRepository {
 
     private final RestTemplate restTemplate;
 
-    public ItemRepository(RestTemplate restTemplate) {
+    public ItemRepositoryImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     @Value("${mercadolibre.api}")
     private String mercadolibreAPI;
 
-    /**
-     * Method to query the user's favorite items prices from MercadoLibre API
-     *
-     * @param items The set of the user's favorite item ids.
-     * @return {@link ItemDTO} Item list, which is composed of the item id and its price.
-     *
-     */
     @Cacheable("items")
+    @Override
     public List<ItemDTO> findItemsByIds(Set<String> items){
         return items
                 .stream()
@@ -47,7 +41,7 @@ public class ItemRepository {
     }
 
     /**
-     * Method to dynamically make the URI with every item id
+     * Method to dynamically create the URI with every item id
      * @param itemId item id
      * @return URI for the item id
      *

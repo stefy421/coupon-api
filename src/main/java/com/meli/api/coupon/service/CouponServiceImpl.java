@@ -4,7 +4,6 @@ import com.meli.api.coupon.dto.ItemDTO;
 import com.meli.api.coupon.dto.RequestDTO;
 import com.meli.api.coupon.dto.ResponseDTO;
 import com.meli.api.coupon.exception.APIServiceException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,39 +14,30 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Service to calculate the of items that can be purchased out of a favorite item list and a coupon amount.
+ * Service implementation to calculate the of items that can be purchased out of a favorite item list and a coupon amount.
  *
  * @author stefanny.rodriguez
  *
  */
 @Service
-public class CouponService {
-    private final ItemService itemService;
-    private HashMap<String, Float> map = new HashMap<>();
+public class CouponServiceImpl implements ICouponService {
+    private final IItemService itemService;
+    private final HashMap<String, Float> map = new HashMap<>();
 
-    @Autowired
-    public CouponService(ItemService itemService){
+    public CouponServiceImpl(IItemService itemService){
         this.itemService = itemService;
     }
 
-    /**
-     * This method returns a suggested list of item to be purchased and the total purchase with the coupon amount.
-     * @param request the user request, which is composed of the list of items to check and the coupon amount.
-     * @return {@link ResponseDTO} the API response, which is composed of the suggested list of items to purchase
-     *                              and the total purchase
-     * @throws APIServiceException When something was wrong during the process or the coupon amount is insufficient.
-     *
-     */
+    @Override
     public ResponseDTO getSuggestedItems(RequestDTO request) {
         List<ItemDTO> items = itemService.findItemsById(request.getItem_ids());
 
-        if(items.stream().anyMatch(item -> item.getPrice() < request.getAmount())){
+        if(items.stream().anyMatch(item -> item.getPrice() < request.getAmount())) {
             Map<String, Float> itemsMap = items.stream()
-                    .collect(Collectors.toMap(ItemDTO::getId, ItemDTO::getPrice, (id,price) -> id));
+                    .collect(Collectors.toMap(ItemDTO::getId, ItemDTO::getPrice, (id, price) -> id));
             return calculate(itemsMap, request.getAmount());
-        }else{
-            throw new APIServiceException("Insufficient coupon amount: User cannot buy at least one item.");
         }
+        throw new APIServiceException("Insufficient coupon amount: User cannot buy at least one item.");
     }
 
     /**
@@ -86,16 +76,15 @@ public class CouponService {
         String key = pos + "-" + amount;
         if(map.containsKey(key)) {
             return map.get(key);
-        }else{
-            if(prices[pos] > amount) {
-                map.put(key, getTotal(pos - 1, amount, prices));
-            }else{
-                Float include = Float.sum(getTotal(pos - 1, amount - prices[pos], prices), prices[pos]);
-                Float exclude = getTotal(pos - 1, amount, prices);
-                map.put(key, Math.max(include, exclude));
-            }
-            return map.get(key);
         }
+        if(prices[pos] > amount) {
+            map.put(key, getTotal(pos - 1, amount, prices));
+        }else{
+            Float include = Float.sum(getTotal(pos - 1, amount - prices[pos], prices), prices[pos]);
+            Float exclude = getTotal(pos - 1, amount, prices);
+            map.put(key, Math.max(include, exclude));
+        }
+        return map.get(key);
     }
 
     /**

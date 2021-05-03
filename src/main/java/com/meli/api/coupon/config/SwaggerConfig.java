@@ -2,17 +2,13 @@ package com.meli.api.coupon.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Configuration for swagger documentation
@@ -25,8 +21,8 @@ import java.util.Set;
 @EnableSwagger2
 public class SwaggerConfig {
     private static final String MAINTAINER = "srodriguez2104@gmail.com";
-    private static final Set<String> DEFAULT_PRODUCES = new HashSet<>(Arrays.asList("application/json"));
-    private static final Set<String> DEFAULT_CONSUMES = new HashSet<>(Arrays.asList("application/json"));
+    private static final Set<String> DEFAULT_PRODUCES = new HashSet<>(Collections.singletonList("application/json"));
+    private static final Set<String> DEFAULT_CONSUMES = new HashSet<>(Collections.singletonList("application/json"));
 
     public static final Contact DEFAULT_CONTACT = new Contact("Stefanny Rodríguez Llanos", MAINTAINER, MAINTAINER);
     public static final ApiInfo DEFAULT = new ApiInfo("Api Documentation for MercadoLibre Coupon API",
@@ -40,7 +36,6 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        //return new Docket(DocumentationType.SWAGGER_2).apiInfo(DEFAULT).select().paths(PathSelectors.any()).build();
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(DEFAULT).produces(DEFAULT_PRODUCES).consumes(DEFAULT_CONSUMES);
     }
 }

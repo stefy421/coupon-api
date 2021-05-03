@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CouponServiceTest {
+class CouponServiceTest {
     @Autowired
-    private CouponService couponService;
+    private ICouponService couponService;
     private final Map<String, Float> itemList = new HashMap<>();
     private final Map<String, Float> itemListWithDecimals = new HashMap<>();
 
@@ -40,7 +40,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void returnMaxPurchaseValueFromAPriceList() {
+    void returnMaxPurchaseValueFromAPriceList() {
         Float[] prices = itemList.values().toArray(new Float[0]);
         int pos = prices.length - 1;
         Float amount = 200000f;
@@ -49,7 +49,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void returnSelectedItemForThePurchaseTotal(){
+    void returnSelectedItemForThePurchaseTotal(){
         Float amount = 200000f;
         ResponseDTO responseDTO = ReflectionTestUtils.invokeMethod(couponService, "calculate", itemList,amount);
         String[] expectedItems = {"MLA6","MLA3","MLA1"};
@@ -57,7 +57,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void returnTwoDecimalsTotalPurchaseFromLargeDecimalPrices(){
+    void returnTwoDecimalsTotalPurchaseFromLargeDecimalPrices(){
         Float amount = 210.8567f;
         ResponseDTO responseDTO = ReflectionTestUtils.invokeMethod(couponService, "calculate", itemListWithDecimals,amount);
         assertEquals(209.77f, responseDTO.getTotal());
